@@ -1,3 +1,5 @@
+#!/bin/sh
+exec make -f- "$@" << 'eof'
 SRCPATH := $(CURDIR)
 PROJECTNAME := $(shell basename $(CURDIR))
 
