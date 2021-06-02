@@ -3,11 +3,12 @@ from flask import current_app as app
 from flask import redirect, render_template, url_for, request
 import json
 import csv
+import os
 from .forms import SignupForm
 
 from flask import Flask, send_file, send_from_directory, abort
 
-DATA_DIRECTORY = "C:/Users/hamilka/Downloads/flask-wtforms-survey/Data/"
+DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
 
 
 @app.route("/")
