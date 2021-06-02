@@ -11,49 +11,45 @@ from wtforms import (
 from wtforms.validators import URL, DataRequired, Email, EqualTo, Length
 
 
-class ContactForm(FlaskForm):
-    """Contact form."""
-
-    name = StringField("Name", [DataRequired()])
-    email = StringField(
-        "Email",
-        [Email(message="Not a valid email address."), DataRequired()]
-    )
-    body = TextAreaField(
-        "Message",
-        [DataRequired(), Length(min=4, message="Your message is too short.")]
-    )
-    submit = SubmitField("Submit")
-
-
 class SignupForm(FlaskForm):
     """Sign up for a user account."""
 
+    firstName = StringField("First Name", [DataRequired()])
+    lastName = StringField("Last Name", [DataRequired()])
     email = StringField(
         "Email",
         [Email(message="Not a valid email address."), DataRequired()]
     )
-    password = PasswordField(
-        "Password",
-        [DataRequired(message="Please enter a password.")],
+    confirmEmail = StringField(
+        "Verify Email",
+        [EqualTo('email', message="Emails must match.")]
     )
-    confirmPassword = PasswordField(
-        "Repeat Password",
-        [EqualTo(password, message="Passwords must match.")]
-    )
-    title = SelectField(
-        "Title",
+    phone = StringField("Phone", [DataRequired()])
+    location = SelectField(
+        "Location",
         [DataRequired()],
         choices=[
-            ("Farmer", "farmer"),
-            ("Corrupt Politician", "politician"),
-            ("No-nonsense City Cop", "cop"),
-            ("Professional Rocket League Player", "rocket"),
-            ("Lonely Guy At A Diner", "lonely"),
-            ("Pokemon Trainer", "pokemon"),
+            ("Administraton", "Administraton"),
+            ("Assembly 1", "Assembly 1"),
+            ("Assembly 2", "Assembly 2"),
+            ("Body Shop", "Body Shop"),
+            ("Paint Shop", "Paint Shop"),
+            ("Bibb County - GSP", "Bibb County - GSP"),
+            ("Bibb County - CC USA", "Bibb County - CC USA"),
+            ("Bibb County - Battery", "Bibb County - Battery"),
+            ("MB ExTra", "MB ExTra"),
         ],
     )
-    website = StringField("Website", validators=[URL()])
-    birthday = DateField("Your Birthday")
-    recaptcha = RecaptchaField()
+    department = StringField("Department", [DataRequired()])
+    e4 = StringField("E4", [DataRequired()])
+    shift = SelectField(
+        "Shift",
+        [DataRequired()],
+        choices=[
+            ("Admin", "Admin"),
+            ("A", "A"),
+            ("B", "B"),
+        ],
+    )
+    # recaptcha = RecaptchaField()
     submit = SubmitField("Submit")

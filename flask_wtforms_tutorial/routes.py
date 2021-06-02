@@ -1,8 +1,13 @@
 """Routing."""
 from flask import current_app as app
-from flask import redirect, render_template, url_for
+from flask import redirect, render_template, url_for, request
+import json
+import csv
+from .forms import SignupForm
 
-from .forms import ContactForm, SignupForm
+from flask import Flask, send_file, send_from_directory, abort
+
+DATA_DIRECTORY = "C:/Users/hamilka/Downloads/flask-wtforms-survey/Data/"
 
 
 @app.route("/")
@@ -11,29 +16,23 @@ def home():
     return render_template(
         "index.jinja2",
         template="home-template",
-        title="Flask-WTF tutorial"
-    )
-
-
-@app.route("/contact", methods=["GET", "POST"])
-def contact():
-    """Standard `contact` form."""
-    form = ContactForm()
-    if form.validate_on_submit():
-        return redirect(url_for("success"))
-    return render_template(
-        "contact.jinja2",
-        form=form,
-        template="form-template",
-        title="Contact Form"
+        title="Survey Home"
     )
 
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-    """User sign-up form for account creation."""
+    #logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
+    #logging.warning('This will get logged to a file')
+    """User sign-up form for giveaway."""
     form = SignupForm()
     if form.validate_on_submit():
+        if request.method == 'POST':
+            with open(DATA_DIRECTORY + 'data.json') as f:    
+                data = json.load(f)
+            data.append(request.form.to_dict())
+            with open(DATA_DIRECTORY + 'data.json', 'w') as f:
+                json.dump(data, f)
         return redirect(url_for("success"))
     return render_template(
         "signup.jinja2",
@@ -50,3 +49,38 @@ def success():
         "success.jinja2",
         template="success-template"
     )
+
+def convert_csv():
+    f = open(DATA_DIRECTORY + 'data.json', 'r')
+    responses = json.load(f)
+    f.close()
+    
+    keys = list(responses[0].keys())
+    
+    f = open(DATA_DIRECTORY + 'data.csv', "w", newline='')
+    
+    try:
+        writer = csv.DictWriter(f, fieldnames=keys)
+        writer.writeheader()
+        for data in responses:
+            writer.writerow(data)
+    except IOError:
+        print("I/O error")
+    f.close()   
+    return 1
+
+@app.route('/get-files/<int:key>/<path:path>',methods = ['GET','POST'])
+def get_files(key=None, path=None):
+
+    if key == 123:
+        if '.csv' in path:
+            convert_csv()
+    
+        """Download a file."""
+        try:
+            return send_from_directory(DATA_DIRECTORY, path, as_attachment=True, cache_timeout=0)
+        
+        except FileNotFoundError:
+            abort(404)
+    else:
+        abort(404)
