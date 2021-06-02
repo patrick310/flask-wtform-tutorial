@@ -4,6 +4,7 @@ from flask import redirect, render_template, url_for, request
 import json
 import csv
 import os
+import os.path
 from .forms import SignupForm
 
 from flask import Flask, send_file, send_from_directory, abort
@@ -29,7 +30,7 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         if request.method == 'POST':
-            with open(DATA_DIRECTORY + 'data.json') as f:    
+            with open(os.path.join(DATA_DIRECTORY, 'data.json')) as f:    
                 data = json.load(f)
             data.append(request.form.to_dict())
             with open(DATA_DIRECTORY + 'data.json', 'w') as f:
@@ -58,7 +59,7 @@ def convert_csv():
     
     keys = list(responses[0].keys())
     
-    f = open(DATA_DIRECTORY + 'data.csv', "w", newline='')
+    f = open(os.path.join(DATA_DIRECTORY, 'data.json'), "w", newline='')
     
     try:
         writer = csv.DictWriter(f, fieldnames=keys)
