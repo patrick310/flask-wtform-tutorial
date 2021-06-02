@@ -5,12 +5,14 @@ import json
 import csv
 import os
 import os.path
+from flask import current_app
 from .forms import SignupForm
 
 from flask import Flask, send_file, send_from_directory, abort
 
 DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-data_file_path = os.path.join(os.path.abspath(__file__), DATA_DIRECTORY, 'data.json')
+data_file_path = os.path.join(DATA_DIRECTORY, 'data.json')
+data_resource = current_app.open_resource(data_file_path)
 
 
 @app.route("/")
@@ -31,10 +33,10 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         if request.method == 'POST':
-            with open(data_file_path) as f:    
+            with data_resource as f:    
                 data = json.load(f)
             data.append(request.form.to_dict())
-            with open(data_file_path, 'w') as f:
+            with current_app.open_resource(data_file_path, 'w') as f:
                 json.dump(data, f)
         return redirect(url_for("success"))
     return render_template(
@@ -54,13 +56,13 @@ def success():
     )
 
 def convert_csv():
-    f = open(data_file_path, 'r')
+    f = current_app.open_resource(data_file_path, 'r')
     responses = json.load(f)
     f.close()
     
     keys = list(responses[0].keys())
     
-    f = open(data_file_path, "w", newline='')
+    f = current_app.open_resource(data_file_path, 'r', newline='')
     
     try:
         writer = csv.DictWriter(f, fieldnames=keys)
