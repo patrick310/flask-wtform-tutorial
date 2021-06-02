@@ -10,7 +10,7 @@ from .forms import SignupForm
 from flask import Flask, send_file, send_from_directory, abort
 
 DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-data_file_path = os.path.join(DATA_DIRECTORY, 'data.json')
+data_file_path = os.path.join(os.path.abspath(__file__), DATA_DIRECTORY, 'data.json')
 
 
 @app.route("/")
