@@ -35,7 +35,7 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         if request.method == 'POST':
-            with open(data_file_path as f):    
+            with open(data_file_path) as f:    
                 data = json.load(f)
             data.append(request.form.to_dict())
             with open(data_file_path, 'w') as f:
