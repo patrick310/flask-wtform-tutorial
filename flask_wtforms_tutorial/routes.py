@@ -38,7 +38,7 @@ def signup():
             with data_resource as f:    
                 data = json.load(f)
             data.append(request.form.to_dict())
-            with current_app.open_resource(data_file_path, 'w') as f:
+            with open(data_file_path, 'w') as f:
                 json.dump(data, f)
         return redirect(url_for("success"))
     return render_template(
