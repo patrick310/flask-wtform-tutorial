@@ -10,8 +10,10 @@ from .forms import SignupForm
 
 from flask import Flask, send_file, send_from_directory, abort
 
+
 DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
 data_file_path = os.path.join(DATA_DIRECTORY, 'data.json')
+csv_file_path = os.path.join(DATA_DIRECTORY, 'data.csv')
 data_resource = current_app.open_resource(data_file_path)
 
 
@@ -62,7 +64,7 @@ def convert_csv():
     
     keys = list(responses[0].keys())
     
-    f = current_app.open_resource(data_file_path, 'r', newline='')
+    f = open(csv_file_path, 'w', newline='')
     
     try:
         writer = csv.DictWriter(f, fieldnames=keys)
