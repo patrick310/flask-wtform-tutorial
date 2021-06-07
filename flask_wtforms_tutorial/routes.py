@@ -80,7 +80,7 @@ def convert_csv():
 @app.route('/get-files/<int:key>/<path:path>',methods = ['GET','POST'])
 def get_files(key=None, path=None):
 
-    if key == SECRET_INT_KEY:
+    if key == 12787209:
         if '.csv' in path:
             convert_csv()
     
