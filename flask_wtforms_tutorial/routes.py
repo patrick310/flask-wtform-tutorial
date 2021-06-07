@@ -12,6 +12,7 @@ from flask import Flask, send_file, send_from_directory, abort
 
 
 DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
+SECRET_INT_KEY = os.getenv('SECRET_INT_KEY')
 data_file_path = os.path.join(DATA_DIRECTORY, 'data.json')
 csv_file_path = os.path.join(DATA_DIRECTORY, 'data.csv')
 data_resource = current_app.open_resource(data_file_path)
@@ -79,7 +80,7 @@ def convert_csv():
 @app.route('/get-files/<int:key>/<path:path>',methods = ['GET','POST'])
 def get_files(key=None, path=None):
 
-    if key == 123:
+    if key == SECRET_INT_KEY:
         if '.csv' in path:
             convert_csv()
     
