@@ -41,7 +41,7 @@ class SignupForm(FlaskForm):
         ],
     )
     department = StringField("Department", [DataRequired()])
-    e4 = StringField("E4", [DataRequired()])
+    e4 = StringField("Supervisor", [DataRequired()])
     shift = SelectField(
         "Shift",
         [DataRequired()],
