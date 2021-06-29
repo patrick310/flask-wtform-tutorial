@@ -1,0 +1,17 @@
+{
+  "fields": [
+    {
+      "type": "title",
+      "key": "SURVEY TITLE HERE"
+    },
+    {
+      "type": "text",
+      "key": "TEXT QUESTION HERE"
+    },
+    {
+      "type": "select",
+      "key": "SELECT QUESTION HERE",
+      "data_list": ["OPTION 1 HERE", "OPTION 2 HERE", "OPTION 3 HERE"]
+    }
+  ]
+}

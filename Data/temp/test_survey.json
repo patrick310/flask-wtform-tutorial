@@ -1,0 +1,26 @@
+{
+  "fields": [
+    {
+      "type": "title",
+      "key": "T-Shirt Form"
+    },
+    {
+      "type": "text",
+      "key": "Name"
+    },
+    {
+      "type": "text",
+      "key": "Email"
+    },
+    {
+      "type": "select",
+      "key": "T-Shirt Size",
+      "data_list": ["XS", "S", "M", "L", "XL"]
+    },
+    {
+      "type": "select",
+      "key": "Color",
+      "data_list": ["Purple", "Blue", "Green", "Yellow", "Orange", "Red", "White", "Black"]
+    }
+  ]
+}
