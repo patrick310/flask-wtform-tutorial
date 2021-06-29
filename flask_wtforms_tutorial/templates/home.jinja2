@@ -15,11 +15,13 @@
 
     <h1>MBUSI Drawing Entry Form</h1>
     <ul>
-      <li>
-          <a href="{{ url_for('signup') }}">
-              Click Here to Enter <i class="fas fa-chevron-right"></i>
+      {% for survey in surveys %}
+        <li>
+          <a href="{{ url_for('create_survey', name=survey[0]) }}">
+            <h2>{{ survey[1] }} <i class="fas fa-chevron-right"></i></h2>
           </a>
-      </li>
+        </li>
+      {% endfor %}
     </ul>
 
 {% endblock %}

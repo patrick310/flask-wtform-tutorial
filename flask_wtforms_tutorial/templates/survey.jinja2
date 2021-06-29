@@ -1,0 +1,36 @@
+{% extends 'layout.jinja2' %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/forms.css') }}"
+        type="text/css"
+    />
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="form-wrapper">
+      <h2 class="title">{{ title }}</h2>
+
+      <form method="POST" action="{{ url_for('create_survey', name=name) }}">
+          {{ form.csrf_token }}
+
+          {% for text_form in form.text_entries %}
+              <fieldset class="form-field">{{text_form.text.label}} {{text_form.text}}
+              </fieldset>
+          {% endfor %}          
+
+          {% for select_form in form.select_entries %}
+              <fieldset class="form-field"> {{select_form.select.label}} {{ select_form.select}}
+              </fieldset>
+          {% endfor %}
+
+          {{ form.submit }}
+
+      </form>
+    </div>
+
+{% endblock %}

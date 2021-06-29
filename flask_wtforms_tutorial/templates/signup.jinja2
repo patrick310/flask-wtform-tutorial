@@ -103,10 +103,10 @@
             {% endif %}
           </fieldset>
 
-          <fieldset class="form-field">{{ form.e4.label }} {{ form.e4 }}
-            {% if form.e4.errors %}
+          <fieldset class="form-field">{{ form.supervisor.label }} {{ form.supervisor }}
+            {% if form.supervisor.errors %}
               <ul class="errors">
-                {% for error in form.e4.errors %}
+                {% for error in form.supervisor.errors %}
                   <li class="error">
                       <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
                   </li>

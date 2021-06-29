@@ -1,0 +1,26 @@
+{% extends 'layout.jinja2' %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/success.css') }}"
+        type="text/css"
+    />
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="form-wrapper">
+      <title>Upload New Survey File</title>
+      <h2>Upload New Survey File</h2>
+
+      <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+	<input type=submit value=Upload>
+      </form>
+    </div>
+
+    
+{% endblock %}
