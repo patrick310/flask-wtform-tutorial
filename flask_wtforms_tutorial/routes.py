@@ -11,8 +11,8 @@ from .forms import SelectForm, TextForm, CompleteForm
 
 from flask import send_from_directory, abort
 
-# DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-DATA_DIRECTORY = "C:/Users/hamilka/Downloads/flask-wtforms-survey/Data/"
+DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
+# DATA_DIRECTORY = "C:/Users/hamilka/Downloads/flask-wtforms-survey/Data/"
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 RESPONSE_DIRECTORY = os.path.join(DATA_DIRECTORY, "results/")
 TEMP_DIRECTORY = os.path.join(DATA_DIRECTORY, "temp/")
