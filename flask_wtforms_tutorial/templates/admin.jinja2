@@ -1,0 +1,58 @@
+{% extends 'layout.jinja2' %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/home.css') }}"
+        type="text/css"
+    />
+
+{% endblock %}
+
+
+{% block content %}
+
+    <h1>Admin Survey Management</h1>
+    <h2>Existing Surveys</h2>
+    <table style="width:100%">
+      <tr>
+        <th><h2>Survey</h2></th>
+        <th><h2>Response Count</h2></th>
+        <th><h2>Last Response</h2></th>
+        <th><h2>Download Survey Responses</h2></th>
+        <th><h2>Delete Survey from Server</h2></th>
+      </tr>
+      
+      {% for survey in surveys %}
+        <tr>
+          <th>
+            <a href="{{ url_for('create_survey', name=survey[0]) }}">
+              <h2> {{ survey[1] }} </h2>
+            </a>
+          </th>
+          <th><h2> {{ survey[2] }} </h2></th>
+          <th><h2> {{ survey[3] }} </h2></th>
+          <th>
+            <a href="{{ url_for('download_file', key=key, path=survey[0]+'_results.json') }}">
+              <h2> Download Responses </h2>
+            </a>
+          </th>
+          <th>
+            <a href="{{ url_for('delete_file', key=key, name=survey[0]) }}">
+              <h2> Delete Survey </h2>
+            </a>
+          </th>
+        </tr>
+      {% endfor %}
+    </table>
+    <h2>Add New Survey</h2>
+      <ul>
+        <li>
+          <a href="{{ url_for('upload_file') }}">
+            Click here to Upload
+          </a>
+        </li>
+      </ul>
+
+{% endblock %}

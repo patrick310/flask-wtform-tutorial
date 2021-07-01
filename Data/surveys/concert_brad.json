@@ -1,0 +1,46 @@
+{
+  "fields": [
+    {
+      "type": "title",
+      "key": "Brad Paisley Concert Drawing"
+    },
+    {
+      "type": "text",
+      "key": "First Name"
+    },
+    {
+      "type": "text",
+      "key": "Last Name"
+    },
+    {
+      "type": "email",
+      "key": "Email"
+    },
+    {
+      "type": "email",
+      "key": "Verify Email"
+    },
+    {
+      "type": "phone",
+      "key": "Phone"
+    },
+    {
+      "type": "text",
+      "key": "Department"
+    },
+    {
+      "type": "text",
+      "key": "Supervisor"
+    },
+    {
+      "type": "select",
+      "key": "Location",
+      "data_list": ["Administration", "Assembly 1", "Assembly 2", "Body Shop", "Paint Shop", "Bibb County - GSP", "Bibb County - CC USA", "Bibb County - Battery", "MB ExTra"]
+    },
+    {
+      "type": "select",
+      "key": "Shift",
+      "data_list": ["Admin", "A", "B"]
+    }
+  ]
+}
