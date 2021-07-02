@@ -12,7 +12,7 @@ from .forms import SelectForm, TextForm, CompleteForm
 from flask import send_from_directory, abort
 
 DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-SECRET_INT_KEY = os.getenv('SECRET_INT_KEY')
+SECRET_INT_KEY = int(os.getenv('SECRET_INT_KEY'))
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 RESPONSE_DIRECTORY = os.path.join(DATA_DIRECTORY, "results/")
 TEMP_DIRECTORY = os.path.join(DATA_DIRECTORY, "temp/")
@@ -182,7 +182,7 @@ def convert_csv(file):
 @app.route('/get-files/<int:key>/<path:path>',methods = ['GET','POST'])
 def download_file(key=None, path=None):
 
-    if key == os.getenv('SECRET_INT_KEY'):
+    if key == SECRET_INT_KEY:
         if '.csv' in path:
             convert_csv(path)
     
@@ -204,7 +204,7 @@ End Download File
 @app.route('/delete/<int:key>/<string:name>', methods=["GET", "POST"])
 def delete_file(key=None, name=None):
     survey = name + '.json'
-    if key == os.getenv('SECRET_INT_KEY'):
+    if key == SECRET_INT_KEY:
         if request.method == "POST":
             if 'Cancel' in request.form:
                 return redirect(url_for("survey_home"))
