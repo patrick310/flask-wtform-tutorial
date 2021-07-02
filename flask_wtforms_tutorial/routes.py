@@ -182,7 +182,7 @@ def convert_csv(file):
 @app.route('/get-files/<int:key>/<path:path>',methods = ['GET','POST'])
 def download_file(key=None, path=None):
 
-    if key == SECRET_INT_KEY:
+    if key == os.getenv('SECRET_INT_KEY'):
         if '.csv' in path:
             convert_csv(path)
     
@@ -204,7 +204,7 @@ End Download File
 @app.route('/delete/<int:key>/<string:name>', methods=["GET", "POST"])
 def delete_file(key=None, name=None):
     survey = name + '.json'
-    if key == SECRET_INT_KEY:
+    if key == os.getenv('SECRET_INT_KEY'):
         if request.method == "POST":
             if 'Cancel' in request.form:
                 return redirect(url_for("survey_home"))
