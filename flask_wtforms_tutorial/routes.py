@@ -12,6 +12,7 @@ from .forms import SelectForm, TextForm, CompleteForm
 from flask import send_from_directory, abort
 
 DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
+SECRET_INT_KEY = os.getenv('SECRET_INT_KEY')
 # DATA_DIRECTORY = "C:/Users/hamilka/Downloads/flask-wtforms-survey/Data/"
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 RESPONSE_DIRECTORY = os.path.join(DATA_DIRECTORY, "results/")
@@ -182,7 +183,7 @@ def convert_csv(file):
 @app.route('/get-files/<int:key>/<path:path>',methods = ['GET','POST'])
 def download_file(key=None, path=None):
 
-    if key == 123:
+    if key == SECRET_INT_KEY:
         if '.csv' in path:
             convert_csv(path)
     
