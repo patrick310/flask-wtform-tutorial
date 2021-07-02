@@ -12,7 +12,7 @@ from .forms import SelectForm, TextForm, CompleteForm
 from flask import send_from_directory, abort
 
 DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-SECRET_INT_KEY = 12787209
+SECRET_INT_KEY = os.getenv('SECRET_INT_KEY')
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 RESPONSE_DIRECTORY = os.path.join(DATA_DIRECTORY, "results/")
 TEMP_DIRECTORY = os.path.join(DATA_DIRECTORY, "temp/")
