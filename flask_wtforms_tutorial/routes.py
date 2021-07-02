@@ -205,7 +205,7 @@ End Download File
 @app.route('/delete/<int:key>/<string:name>', methods=["GET", "POST"])
 def delete_file(key=None, name=None):
     survey = name + '.json'
-    if key == SECRET_INT_KEY
+    if key == SECRET_INT_KEY:
         if request.method == "POST":
             if 'Cancel' in request.form:
                 return redirect(url_for("survey_home"))
