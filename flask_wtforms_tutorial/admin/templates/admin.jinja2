@@ -27,19 +27,19 @@
       {% for survey in surveys %}
         <tr>
           <th>
-            <a href="{{ url_for('create_survey', name=survey[0]) }}">
+            <a href="{{ url_for('survey_bp.create_survey', name=survey[0]) }}">
               <h2> {{ survey[1] }} </h2>
             </a>
           </th>
           <th><h2> {{ survey[2] }} </h2></th>
           <th><h2> {{ survey[3] }} </h2></th>
           <th>
-            <a href="{{ url_for('download_file', key=key, path=survey[0]+'_results.json') }}">
+            <a href="{{ url_for('admin_bp.download_file', path=survey[0]+'_responses.json') }}">
               <h2> Download Responses </h2>
             </a>
           </th>
           <th>
-            <a href="{{ url_for('delete_file', key=key, name=survey[0]) }}">
+            <a href="{{ url_for('admin_bp.delete_file', name=survey[0]) }}">
               <h2> Delete Survey </h2>
             </a>
           </th>
@@ -49,7 +49,7 @@
     <h2>Add New Survey</h2>
       <ul>
         <li>
-          <a href="{{ url_for('upload_file') }}">
+          <a href="{{ url_for('admin_bp.upload_file') }}">
             Click here to Upload
           </a>
         </li>

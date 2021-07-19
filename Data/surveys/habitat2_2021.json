@@ -2,7 +2,7 @@
   "fields": [
     {
       "type": "title",
-      "key": "Brad Paisley Concert Drawing"
+      "key": "Habitat for Humanity 2021 Registration"
     },
     {
       "type": "text",
@@ -17,19 +17,19 @@
       "required": "True"
     },
     {
-      "type": "email",
+      "type": "text",
       "key": "Email",
       "priority": 2,
       "required": "True"
     },
     {
-      "type": "email",
+      "type": "text",
       "key": "Verify Email",
       "priority": 3,
       "required": "True"
     },
     {
-      "type": "phone",
+      "type": "text",
       "key": "Phone",
       "priority": 4,
       "required": "True"
@@ -59,6 +59,20 @@
       "data_list": ["Admin", "A", "B"],
       "priority": 8,
       "required": "True"
+    },
+    {
+      "type": "select",
+      "key": "T-Shirt Size",
+      "data_list": ["S", "M", "L", "XL"],
+      "priority": 9,
+      "required": "True"
+    },
+    {
+      "type": "checkbox",
+      "key": "I am available to volunteer to work on the following days (Please check all that apply)",
+      "data_list": [["Tuesday", "Tuesday"], ["Wednesday", "Wednesday"]],
+      "priority": 10,
+      "required": "False"
     }
   ]
 }
