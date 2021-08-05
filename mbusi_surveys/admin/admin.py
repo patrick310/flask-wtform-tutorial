@@ -71,7 +71,7 @@ def download_all():
 
 
 # TO DO: delete data?
-# Delete survey file
+# Delete survey file and data
 @admin_bp.route('/delete/<string:name>', methods=["GET", "POST"])
 @login_required
 def delete_file(key=None, name=None):
@@ -80,8 +80,18 @@ def delete_file(key=None, name=None):
         if 'Cancel' in request.form:
             return redirect(url_for("survey_bp.survey_home"))
         elif 'Continue' in request.form:
+            # check to make sure survey file exists, and then delete
             if os.path.exists(os.path.join(SURVEY_DIRECTORY, survey)):
                 os.remove(os.path.join(SURVEY_DIRECTORY, survey))
+                data = name + '_responses'
+                data_json = data + '.json'
+                data_csv = data + '.csv'
+                # check for and remove json results file
+                if os.path.exists(os.path.join(RESPONSE_DIRECTORY, data_json)):
+                    os.remove(os.path.join(RESPONSE_DIRECTORY, data_json))
+                # check for and remove csv results file
+                if os.path.exists(os.path.join(RESPONSE_DIRECTORY, data_csv)):
+                    os.remove(os.path.join(RESPONSE_DIRECTORY, data_csv))
                 return redirect(url_for("admin_bp.deleted"))
             else:
                 abort(404)
