@@ -3,9 +3,13 @@ import os
 import os.path
 import uuid
 from .forms import SelectForm, MultiForm, TextForm, EmailForm, PhoneForm
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-DATA_DIRECTORY = "C:/Users/hamilka/Downloads/mbusi_surveys/data/"
+# DATA_DIRECTORY = "C:/Users/hamilka/Downloads/mbusi_surveys/data/"
+DATA_DIRECTORY = os.environ.get("DATA_DIRECTORY")
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 
 # Get data from file

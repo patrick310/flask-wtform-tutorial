@@ -14,6 +14,14 @@
 {% block content %}
 
     <h1>Admin Survey Management</h1>
+    <h2>Create New Admin User</h2>
+      <ul>
+        <li>
+          <a href="{{ url_for('auth.signup') }}">
+            Click Here to Add New Admin User
+          </a>
+        </li>
+      </ul>
     <h2>Existing Surveys</h2>
     <table style="width:100%">
       <tr>
@@ -34,7 +42,7 @@
           <th><h2> {{ survey[2] }} </h2></th>
           <th><h2> {{ survey[3] }} </h2></th>
           <th>
-            <a href="{{ url_for('admin_bp.download_file', path=survey[0]+'_responses.json') }}">
+            <a href="{{ url_for('admin_bp.download_file', path=survey[0]+'_responses.csv') }}">
               <h2> Download Responses </h2>
             </a>
           </th>
@@ -50,7 +58,15 @@
       <ul>
         <li>
           <a href="{{ url_for('admin_bp.upload_file') }}">
-            Click here to Upload
+            Click Here to Upload
+          </a>
+        </li>
+      </ul>
+    <h2>Logout</h2>
+      <ul>
+        <li>
+          <a href="{{ url_for('auth.logout') }}">
+            Click Here to Log Out
           </a>
         </li>
       </ul>

@@ -6,9 +6,13 @@ import os.path
 from werkzeug.utils import secure_filename
 from flask import send_from_directory, abort, Blueprint
 from flask_login import login_required
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-DATA_DIRECTORY = "C:/Users/hamilka/Downloads/mbusi_surveys/data/"
+# DATA_DIRECTORY = "C:/Users/hamilka/Downloads/mbusi_surveys/data/"
+DATA_DIRECTORY = os.environ.get("DATA_DIRECTORY")
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 RESPONSE_DIRECTORY = os.path.join(DATA_DIRECTORY, "responses/")
 TEMP_DIRECTORY = os.path.join(DATA_DIRECTORY, "temp/")
@@ -48,7 +52,7 @@ def convert_csv(file):
 # download json or csv file
 @admin_bp.route('/get-files/<path:path>',methods = ['GET','POST'])
 @login_required
-def download_file(key=None, path=None):
+def download_file(path=None):
     if '.csv' in path:
         convert_csv(path)
 
@@ -57,7 +61,13 @@ def download_file(key=None, path=None):
         #redirect(url_for("downloaded"))
         
     except FileNotFoundError:
-        abort(404)        
+        abort(404)    
+
+# TO DO: Download all files, entire data directory, zip and download        
+@admin_bp.route('/download-all', methods = ['GET', 'POST'])
+@login_required
+def download_all():
+    pass
 
 
 # TO DO: delete data?
@@ -91,7 +101,6 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Upload file
-# TO DO: Check if new survey is loadable i.e. json is loadable
 @admin_bp.route('/upload', methods=['GET','POST'])
 @login_required
 def upload_file():
@@ -108,15 +117,29 @@ def upload_file():
         elif file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             if not os.path.isfile(os.path.join(SURVEY_DIRECTORY, filename)):
-                file.save(os.path.join(SURVEY_DIRECTORY, filename))
-                responses = filename.replace('.json', '')
-                responses = responses + '_responses.json'
-                # create response file
-                with open(os.path.join(RESPONSE_DIRECTORY, responses), 'w') as f:
-                    f.write('{}')
-                return redirect(url_for("admin_bp.uploaded"))
+                # file.save(os.path.join(SURVEY_DIRECTORY, filename))
+                file.save(os.path.join(TEMP_DIRECTORY, filename))
+                # check if file is json loadable
+                try: 
+                    f = open(os.path.join(TEMP_DIRECTORY, filename), 'r')
+                    survey = json.load(f)
+                    f.close()
+                    if os.path.exists(os.path.join(TEMP_DIRECTORY, filename)):
+                        os.replace(os.path.join(TEMP_DIRECTORY, filename), os.path.join(SURVEY_DIRECTORY, filename))
+                    response_file = filename.replace('.json', '')
+                    response_file = response_file + '_responses.json'
+                    # create response file
+                    with open(os.path.join(RESPONSE_DIRECTORY, response_file), 'w') as f:
+                        f.write('{}')
+                    return redirect(url_for("admin_bp.uploaded"))
+                except:
+                    f.close()
+                    if os.path.exists(os.path.join(TEMP_DIRECTORY, filename)):
+                        os.remove(os.path.join(TEMP_DIRECTORY, filename))
+                    return redirect(url_for("admin_bp.upload_error"))
+                
+                
             else:
-                # TO DO: if file exists, add line letting admin know file already exists
                 file.save(os.path.join(TEMP_DIRECTORY, filename))
                 return redirect(url_for("admin_bp.update_file", file=filename))
         else:
@@ -235,3 +258,12 @@ def deleted():
 """
 End Success Functions
 """
+
+# Error uploading new survey
+@admin_bp.route("/upload_error")
+def upload_error():
+    return render_template(
+        "error.jinja2",
+        text="File could not be loaded, check format.",
+        template="success-template"
+    )
