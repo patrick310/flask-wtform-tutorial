@@ -19,7 +19,7 @@
           {% for x in range(size) %}
               {% if form.text_entries.__len__() > 0 and form.text_entries.__getitem__(form.text_entries.__len__() - 1).priority == x %}
                   {% set text_form = form.text_entries.pop() -%}
-                  <fieldset class="form-field">{{text_form.text.label}} {{text_form.text}}
+                  <fieldset class="form-field">{{text_form.text.label}} {{text_form.text}} 
                     {% if text_form.text.errors %}
                       <ul class="errors">
                         {% for error in text_form.text.errors %}
@@ -70,11 +70,11 @@
                     {% endif %}
                   </fieldset>
               {% elif form.multi_entries.__len__() > 0 and form.multi_entries.__getitem__(form.multi_entries.__len__() - 1).priority == x %}
-                  {% set multi_form = form.multi_entries.pop() -%}
-                  <fieldset class="form-field">{{multi_form.multi.label}} {{multi_form.multi}}
-                    {% if multi_form.multi.errors %}
+                  {%- set multi_form = form.multi_entries.pop() -%}
+                  <fieldset class="form-field">{{multi_form.multi.label}}{{select_multi_checkbox(multi_form.multi)}}  
+                    {%- if multi_form.multi.errors %}
                       <ul class="errors">
-                        {% for error in multi_form.multi.errors %}
+                        {%- for error in multi_form.multi.errors %}
                           <li class="error">
                             <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
                           </li>
