@@ -11,6 +11,7 @@ def create_app():
     app.config.from_object("config.Config")
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
     
     db.init_app(app)
     
