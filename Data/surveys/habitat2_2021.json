@@ -1,0 +1,78 @@
+{
+  "fields": [
+    {
+      "type": "title",
+      "key": "Habitat for Humanity 2021 Registration"
+    },
+    {
+      "type": "text",
+      "key": "First Name",
+      "priority": 0,
+      "required": "True"
+    },
+    {
+      "type": "text",
+      "key": "Last Name",
+      "priority": 1,
+      "required": "True"
+    },
+    {
+      "type": "text",
+      "key": "Email",
+      "priority": 2,
+      "required": "True"
+    },
+    {
+      "type": "text",
+      "key": "Verify Email",
+      "priority": 3,
+      "required": "True"
+    },
+    {
+      "type": "text",
+      "key": "Phone",
+      "priority": 4,
+      "required": "True"
+    },
+    {
+      "type": "text",
+      "key": "Department",
+      "priority": 5,
+      "required": "True"
+    },
+    {
+      "type": "text",
+      "key": "Supervisor",
+      "priority": 6,
+      "required": "True"
+    },
+    {
+      "type": "select",
+      "key": "Location",
+      "data_list": ["Administration", "Assembly 1", "Assembly 2", "Body Shop", "Paint Shop", "Bibb County - GSP", "Bibb County - CC USA", "Bibb County - Battery", "MB ExTra"],
+      "priority": 7,
+      "required": "True"
+    },
+    {
+      "type": "select",
+      "key": "Shift",
+      "data_list": ["Admin", "A", "B"],
+      "priority": 8,
+      "required": "True"
+    },
+    {
+      "type": "select",
+      "key": "T-Shirt Size",
+      "data_list": ["S", "M", "L", "XL"],
+      "priority": 9,
+      "required": "True"
+    },
+    {
+      "type": "checkbox",
+      "key": "I am available to volunteer to work on the following days (Please check all that apply)",
+      "data_list": [["Tuesday", "Tuesday"], ["Wednesday", "Wednesday"]],
+      "priority": 10,
+      "required": "False"
+    }
+  ]
+}

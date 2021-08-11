@@ -1,0 +1,92 @@
+{% extends 'layout.jinja2' %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/forms.css') }}"
+        type="text/css"
+    />
+
+{% endblock %}
+
+{% block content %}
+  <div class="form-wrapper">
+    <h2 class="title">{{ title }}</h2>
+    <form method="POST" action="{{ url_for('survey_bp.create_survey', name=name) }}">
+          {{ form.csrf_token }}
+          
+          {% for x in range(size) %}
+              {% if form.text_entries.__len__() > 0 and form.text_entries.__getitem__(form.text_entries.__len__() - 1).priority == x %}
+                  {% set text_form = form.text_entries.pop() -%}
+                  <fieldset class="form-field">{{text_form.text.label}} {{text_form.text}} 
+                    {% if text_form.text.errors %}
+                      <ul class="errors">
+                        {% for error in text_form.text.errors %}
+                          <li class="error">
+                            <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </fieldset>
+              {% elif form.email_entries.__len__() > 0 and form.email_entries.__getitem__(form.email_entries.__len__() - 1).priority == x %}
+                  {% set email_form = form.email_entries.pop() -%}
+                  <fieldset class="form-field">{{email_form.email.label}} {{email_form.email}}
+                    {% if email_form.email.errors %}
+                      <ul class="errors">
+                        {% for error in email_form.email.errors %}
+                          <li class="error">
+                            <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </fieldset>
+              {% elif form.phone_entries.__len__() > 0 and form.phone_entries.__getitem__(form.phone_entries.__len__() - 1).priority == x %}
+                  {% set phone_form = form.phone_entries.pop() -%}
+                  <fieldset class="form-field">{{phone_form.phone.label}} {{phone_form.phone}}
+                    {% if phone_form.phone.errors %}
+                      <ul class="errors">
+                        {% for error in phone_form.phone.errors %}
+                          <li class="error">
+                            <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </fieldset>
+              {% elif form.select_entries.__len__() > 0 and form.select_entries.__getitem__(form.select_entries.__len__() - 1).priority == x %}
+                  {% set select_form = form.select_entries.pop() -%}
+                  <fieldset class="form-field">{{select_form.select.label}} {{select_form.select}}
+                    {% if select_form.select.errors %}
+                      <ul class="errors">
+                        {% for error in select_form.select.errors %}
+                          <li class="error">
+                            <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </fieldset>
+              {% elif form.multi_entries.__len__() > 0 and form.multi_entries.__getitem__(form.multi_entries.__len__() - 1).priority == x %}
+                  {%- set multi_form = form.multi_entries.pop() -%}
+                  <fieldset class="form-field">{{multi_form.multi.label}}{{select_multi_checkbox(multi_form.multi)}}  
+                    {%- if multi_form.multi.errors %}
+                      <ul class="errors">
+                        {%- for error in multi_form.multi.errors %}
+                          <li class="error">
+                            <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </fieldset>
+              {% endif %}
+          {% endfor %}
+
+          {{ form.submit }}
+
+    </form>
+  </div>
+{% endblock %}

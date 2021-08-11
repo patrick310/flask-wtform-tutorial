@@ -1,0 +1,96 @@
+{% extends 'layout.jinja2' %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/forms.css') }}"
+        type="text/css"
+    />
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="form-wrapper">
+      <h2 class="title">{{ title }}</h2>
+
+      <form method="POST" action="{{ url_for('survey_bp.create_survey', name=name) }}">
+          {{ form.csrf_token }}
+
+          {% for text_form in form.text_entries %}
+              <fieldset class="form-field">{{text_form.text.label}} {{text_form.text}}
+                {% if text_form.text.errors %}
+                  <ul class="errors">
+                    {% for error in text_form.text.errors %}
+                      <li class="error">
+                        <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </fieldset>
+          {% endfor %}
+
+          {% for email_form in form.email_entries %}
+              <fieldset class="form-field">{{email_form.email.label}} {{email_form.email}}
+                {% if email_form.email.errors %}
+                  <ul class="errors">
+                    {% for error in email_form.email.errors %}
+                      <li class="error">
+                        <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </fieldset>
+          {% endfor %}
+          
+          {% for phone_form in form.phone_entries %}
+              <fieldset class="form-field"> {{phone_form.phone.label}} {{phone_form.phone}}
+                {% if phone_form.phone.errors %}
+                  <ul class="errors">
+                    {% for error in phone_form.phone.errors %}
+                      <li class="error">
+                        <i class="fas fa-exclamation"></i> <span class="error-message">{{error}}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </fieldset>
+          {% endfor %}         
+
+          {% for select_form in form.select_entries %}
+              <fieldset class="form-field"> {{select_form.select.label}} {{select_form.select}}
+                {% if select_form.select.errors %}
+                  <ul class="errors">
+                    {% for error in select_form.select.errors %}
+                      <li class="error">
+                        <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </fieldset>
+          {% endfor %}
+
+          {% for multi_form in form.multi_entries %}
+              <fieldset class="form-field"> {{multi_form.multi.label}} {{multi_form.multi}}
+                {% if multi_form.multi.errors %}
+                  <ul class="errors">
+                    {% for error in multi_form.multi.errors %}
+                      <li class="error">
+                        <i class="fas fa-exclamation"></i> <span class="error-message">{{ error }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </fieldset>
+          {% endfor %}
+
+          {{ form.submit }}
+
+      </form>
+    </div>
+
+{% endblock %}

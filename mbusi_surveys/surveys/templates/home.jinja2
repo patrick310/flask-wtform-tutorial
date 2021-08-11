@@ -17,7 +17,7 @@
     <ul>
       {% for survey in surveys %}
         <li>
-          <a href="{{ url_for('create_survey', name=survey[0]) }}">
+          <a href="{{ url_for('survey_bp.create_survey', name=survey[0]) }}">
             <h2>{{ survey[1] }} <i class="fas fa-chevron-right"></i></h2>
           </a>
         </li>
