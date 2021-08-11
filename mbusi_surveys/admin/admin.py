@@ -70,7 +70,6 @@ def download_all():
     pass
 
 
-# TO DO: delete data?
 # Delete survey file and data
 @admin_bp.route('/delete/<string:name>', methods=["GET", "POST"])
 @login_required

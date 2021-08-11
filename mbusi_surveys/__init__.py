@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+import os
 
 db = SQLAlchemy()
 
@@ -9,7 +10,11 @@ def create_app():
     """Construct the core flask_wtforms_tutorial."""
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object("config.Config")
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    if os.getenv('DATABASE_URI'):
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     
