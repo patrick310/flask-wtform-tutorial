@@ -44,8 +44,12 @@ def create_app():
         app.register_blueprint(surveys.survey_bp)
         
         db.metadata.create_all(db.engine)
-        user = User(id=0, email="developer@mbusi.com", password="12345", name="admin")
-        db.session.add(user)
-        db.session.commit()
+
+        if User.query.all():
+            print("Admin user exists")
+        else:
+            user = User(id=0, email="developer@mbusi.com", password="12345", name="admin")
+            db.session.add(user)
+            db.session.commit()
         
         return app
