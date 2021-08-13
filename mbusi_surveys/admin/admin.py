@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory, abort, Blueprint
 from flask_login import login_required
 from dotenv import load_dotenv
+import shutil
 
 load_dotenv()
 
@@ -157,7 +158,7 @@ def upload_file():
                     # move file to survey folder
                     if os.path.exists(os.path.join(TEMP_DIRECTORY, filename)):
                         print("Survey path does exist; ready to move to surveys directory")
-                        os.replace(os.path.join(TEMP_DIRECTORY, filename), os.path.join(SURVEY_DIRECTORY, filename))
+                        shutil.move(os.path.join(TEMP_DIRECTORY, filename), os.path.join(SURVEY_DIRECTORY, filename))
                         print("Survey " + str(filename) + " has been moved to the surveys folder")
                     
                     # create response file
