@@ -13,7 +13,6 @@ from wtforms.widgets import html_params
 load_dotenv()
 
 # DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-# DATA_DIRECTORY = "C:/Users/hamilka/Downloads/mbusi_surveys/data/"
 DATA_DIRECTORY = os.environ.get("DATA_DIRECTORY")
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 RESPONSE_DIRECTORY = os.path.join(DATA_DIRECTORY, "responses/")
@@ -50,8 +49,11 @@ def utility_processor():
 @survey_bp.route('/')
 def survey_home():
     surveys = []
+    
+    # store title for each survey in survey folder
     for file in os.listdir(SURVEY_DIRECTORY):
         surveys.append([file.replace('.json', ''), build.get_survey_title(file)])
+    
     return render_template(
         "home.jinja2",
         surveys=surveys,
@@ -62,6 +64,8 @@ def survey_home():
 @survey_bp.route('/enter/<string:name>', methods=['GET','POST'])
 def create_survey(name=None):
     file = name + '.json'
+    
+    # if survey file found, render form
     if os.path.isfile(os.path.join(SURVEY_DIRECTORY, file)):
         
         form = CompleteForm()
@@ -80,6 +84,7 @@ def create_survey(name=None):
         size = size + form.phone_entries.__len__()
         size = size + form.multi_entries.__len__()
         
+        # validate form response and store values
         if form.validate_on_submit():
             if request.method == 'POST':
                 with open(RESPONSE_DIRECTORY + name + '_responses.json') as f:    

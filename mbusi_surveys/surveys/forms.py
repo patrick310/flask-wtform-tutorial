@@ -27,11 +27,6 @@ class MultiCheckboxField(SelectMultipleField):
 class MultiForm(FlaskForm):
     multi = MultiCheckboxField("Placeholder", choices=[])
     priority = 0
-
-"""       
-class MultiForm(FlaskForm):
-    multi = SelectMultipleField("Placeholder", choices=[])
-"""
    
 class EmailForm(FlaskForm):
     email = EmailField("Placeholder")

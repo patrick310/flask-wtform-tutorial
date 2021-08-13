@@ -10,10 +10,12 @@ auth = Blueprint(
     static_folder='static'
 )
 
+# Render login page
 @auth.route('/login')
 def login():
     return render_template('login.html')
 
+# Handling for login page once user submits data
 @auth.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')
@@ -39,11 +41,13 @@ def login_post():
     return redirect(url_for('admin_bp.admin'))
 
 
+# Render signup page
 @auth.route('/signup')
 @login_required
 def signup():
     return render_template('signup.html')
 
+# Handling for signup page once user submits data
 @auth.route('/signup', methods=['POST'])
 @login_required
 def signup_post():
@@ -67,6 +71,7 @@ def signup_post():
     # code to validate and add user to database goes here
     return redirect(url_for('auth.login'))
 
+# Handle logout process
 @auth.route('/logout')
 @login_required
 def logout():

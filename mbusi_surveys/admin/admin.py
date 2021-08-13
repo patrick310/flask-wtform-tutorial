@@ -11,7 +11,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-# DATA_DIRECTORY = "C:/Users/hamilka/Downloads/mbusi_surveys/data/"
 DATA_DIRECTORY = os.environ.get("DATA_DIRECTORY")
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 RESPONSE_DIRECTORY = os.path.join(DATA_DIRECTORY, "responses/")
@@ -28,16 +27,20 @@ admin_bp = Blueprint(
 
 # Convert json file to csv
 def convert_csv(file):
+    # load file and store json data
     original_file = file.replace('.csv', '.json')
     f = open(os.path.join(RESPONSE_DIRECTORY, original_file), 'r')
     responses = json.load(f)
     f.close()
     
+    # get dictionary keys for csv header
     key = list(responses.keys())[0]
     keys = list(responses[key].keys())
     
+    # open or create csv file
     f = open(os.path.join(RESPONSE_DIRECTORY, file), "w", newline='')
     
+    # try writing data to csv file
     try:
         writer = csv.DictWriter(f, fieldnames=keys)
         writer.writeheader()
@@ -53,17 +56,19 @@ def convert_csv(file):
 @admin_bp.route('/get-files/<path:path>',methods = ['GET','POST'])
 @login_required
 def download_file(path=None):
+    # if downloading csv file, update or create csv file
     if '.csv' in path:
         convert_csv(path)
 
+    # try to return file 
     try:
         return send_from_directory(RESPONSE_DIRECTORY, path, as_attachment=True, cache_timeout=0)
-        #redirect(url_for("downloaded"))
         
+    # give 404 error if unable to download file
     except FileNotFoundError:
         abort(404)    
 
-# TO DO: Download all files, entire data directory, zip and download        
+# TO DO: Download entire data directory, zip and download        
 @admin_bp.route('/download-all', methods = ['GET', 'POST'])
 @login_required
 def download_all():
@@ -76,18 +81,25 @@ def download_all():
 def delete_file(key=None, name=None):
     survey = name + '.json'
     if request.method == "POST":
+        
+        # if user does not want to delete file, redirect to survey home
         if 'Cancel' in request.form:
             return redirect(url_for("survey_bp.survey_home"))
+        
+        # if user wants to delete file, delete survey and response data
         elif 'Continue' in request.form:
+            
             # check to make sure survey file exists, and then delete
             if os.path.exists(os.path.join(SURVEY_DIRECTORY, survey)):
                 os.remove(os.path.join(SURVEY_DIRECTORY, survey))
                 data = name + '_responses'
                 data_json = data + '.json'
                 data_csv = data + '.csv'
+                
                 # check for and remove json results file
                 if os.path.exists(os.path.join(RESPONSE_DIRECTORY, data_json)):
                     os.remove(os.path.join(RESPONSE_DIRECTORY, data_json))
+                
                 # check for and remove csv results file
                 if os.path.exists(os.path.join(RESPONSE_DIRECTORY, data_csv)):
                     os.remove(os.path.join(RESPONSE_DIRECTORY, data_csv))
@@ -114,40 +126,52 @@ def allowed_file(filename):
 @login_required
 def upload_file():
     if request.method == 'POST':
+        
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
+        
         # If the user does not select a file
         if file.filename == '':
             flash('No selected file')
             return redirect(url_for("admin_bp.upload_file"))
+        
+        # if file selected and is a json file
         elif file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            
+            # if file does not already exist
             if not os.path.isfile(os.path.join(SURVEY_DIRECTORY, filename)):
-                # file.save(os.path.join(SURVEY_DIRECTORY, filename))
+                # save file to temp folder
                 file.save(os.path.join(TEMP_DIRECTORY, filename))
+                
                 # check if file is json loadable
                 try: 
                     f = open(os.path.join(TEMP_DIRECTORY, filename), 'r')
                     survey = json.load(f)
                     f.close()
+                    
+                    # move file to survey folder
                     if os.path.exists(os.path.join(TEMP_DIRECTORY, filename)):
                         os.replace(os.path.join(TEMP_DIRECTORY, filename), os.path.join(SURVEY_DIRECTORY, filename))
+                    
+                    # create response file
                     response_file = filename.replace('.json', '')
                     response_file = response_file + '_responses.json'
-                    # create response file
                     with open(os.path.join(RESPONSE_DIRECTORY, response_file), 'w') as f:
                         f.write('{}')
                     return redirect(url_for("admin_bp.uploaded"))
                 except:
                     f.close()
+                    
+                    # if file was not loadable, delete from temp folder
                     if os.path.exists(os.path.join(TEMP_DIRECTORY, filename)):
                         os.remove(os.path.join(TEMP_DIRECTORY, filename))
                     return redirect(url_for("admin_bp.upload_error"))
                 
-                
+            # if survey file already exists, redirect to update page
             else:
                 file.save(os.path.join(TEMP_DIRECTORY, filename))
                 return redirect(url_for("admin_bp.update_file", file=filename))
@@ -158,19 +182,25 @@ def upload_file():
         title="Upload Survey"
     )
 
+# Give user option to update file if file already exists
 @admin_bp.route("/update/<string:file>", methods=["GET","POST"])
 @login_required
 def update_file(file):
     if request.method=="POST":
+        
+        # if user does not want to update survey, redirect to upload page
         if 'Cancel' in request.form:
             if os.path.exists(os.path.join(TEMP_DIRECTORY, file)):
                 os.remove(os.path.join(TEMP_DIRECTORY, file))
             return redirect(url_for("admin_bp.upload_file"))
+        
+        # if user wants to update survey, move file to survey folder
         elif 'Continue' in request.form:
             # TO DO: Update response file to handle additional fields? If saving to sqlite, will need to be handled during CSV conversion only
             if os.path.exists(os.path.join(TEMP_DIRECTORY, file)):
                 os.replace(os.path.join(TEMP_DIRECTORY, file), os.path.join(SURVEY_DIRECTORY, file))
             return redirect(url_for("admin_bp.updated"))
+    
     return render_template(
         "update.jinja2",
         title="Update Survey",
@@ -180,11 +210,13 @@ def update_file(file):
 End Upload Survey File
 """
 
+# Get number of responses for a survey
 def get_entry_count(file):
     f = open(os.path.join(RESPONSE_DIRECTORY, file))
     responses = json.load(f)
     return len(responses)
 
+# Get date of last response for a survey
 def get_response_date(file):
     f = open(os.path.join(RESPONSE_DIRECTORY, file))
     responses = json.load(f)
@@ -208,8 +240,11 @@ def get_survey_title(file):
     for entry in entries["fields"]:
         if entry["type"] == "title":
             return entry["key"]
+    
+    # default return value if no title key is found
     return "Survey"
              
+# Admin survey management homepage
 @admin_bp.route("/", methods=["GET", "POST"])
 @login_required
 def admin():
@@ -232,14 +267,6 @@ def admin():
 """
 Success Functions
 """
-# TO DO: Figure out how to give success page for downloading a file
-@admin_bp.route("/downloaded")
-def downloaded():
-    return render_template(
-        "success.jinja2",
-        text="Your file has been downloaded",
-        template="success-template"
-    )
 
 # Succesful survey upload
 @admin_bp.route("/uploaded", methods=["GET", "POST"])

@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # DATA_DIRECTORY = os.getenv('DATA_DIRECTORY')
-# DATA_DIRECTORY = "C:/Users/hamilka/Downloads/mbusi_surveys/data/"
 DATA_DIRECTORY = os.environ.get("DATA_DIRECTORY")
 SURVEY_DIRECTORY = os.path.join(DATA_DIRECTORY, "surveys/")
 
@@ -24,6 +23,8 @@ def get_phone_data_from_custom_questions(file):
     type = "phone"
     phone_data = []
     custom_questions = get_custom_questions(file)
+    
+    # store all phone entries from data
     for field in custom_questions["fields"]:
         if field["type"] == type:
             phone_data.append({"key": field["key"],
@@ -35,6 +36,8 @@ def get_phone_data_from_custom_questions(file):
 def get_phone_entries(file):
     phone_data = get_phone_data_from_custom_questions(file)
     all_phone_items = []
+    
+    # create phone form entries
     for item in phone_data:
         phone_id = uuid.uuid1()
         phone_entry = PhoneForm()
@@ -53,6 +56,8 @@ def get_email_data_from_custom_questions(file):
     type = "email"
     email_data = []
     custom_questions = get_custom_questions(file)
+    
+    # store all email entries from data
     for field in custom_questions["fields"]:
         if field["type"] == type:
             email_data.append({"key": field["key"],
@@ -64,6 +69,8 @@ def get_email_data_from_custom_questions(file):
 def get_email_entries(file):
     email_data = get_email_data_from_custom_questions(file)
     all_email_items = []
+    
+    # create email form entries
     for item in email_data:
         email_id = uuid.uuid1()
         email_entry = EmailForm()
@@ -82,6 +89,8 @@ def get_text_data_from_custom_questions(file):
     type = "text"
     text_data = []
     custom_questions = get_custom_questions(file) 
+    
+    # store all text question entries from data
     for field in custom_questions["fields"]:
         if field["type"] == type:
             text_data.append({"key": field["key"],
@@ -93,6 +102,8 @@ def get_text_data_from_custom_questions(file):
 def get_text_entries(file):
     text_data = get_text_data_from_custom_questions(file)
     all_text_items = []
+    
+    # create text question form entries
     for item in text_data:
         text_id = uuid.uuid1()
         text_entry = TextForm()
@@ -111,6 +122,8 @@ def get_multi_data_from_custom_questions(file):
     type = "checkbox"
     multi_data = []
     custom_questions = get_custom_questions(file)
+    
+    # store all multiselect question entries from data
     for field in custom_questions["fields"]:
         if field["type"] == type:
             multi_data.append({"key": field["key"], 
@@ -123,6 +136,8 @@ def get_multi_data_from_custom_questions(file):
 def get_multi_entries(file):
     multi_data = get_multi_data_from_custom_questions(file)
     all_multi_items = []
+    
+    # create multiselect question form entries
     for multi_dict in multi_data:
         multi_id = uuid.uuid1()
         multi_entry = MultiForm()
@@ -142,6 +157,8 @@ def get_select_data_from_custom_questions(file):
     type = "select"
     select_data = []
     custom_questions = get_custom_questions(file)
+    
+    # store all select question entries from data
     for field in custom_questions["fields"]:
         if field["type"] == type:
             select_data.append({"key": field["key"],
@@ -154,6 +171,8 @@ def get_select_data_from_custom_questions(file):
 def get_select_entries(file):
     select_data = get_select_data_from_custom_questions(file)
     all_select_items = []
+    
+    # create select question form entries
     for select_dict in select_data:
         select_id = uuid.uuid1()   # allows for multiple selects
         select_entry = SelectForm()
