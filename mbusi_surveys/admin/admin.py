@@ -249,15 +249,18 @@ def get_survey_title(file):
 @login_required
 def admin():
     surveys = []
-    for file in os.listdir(SURVEY_DIRECTORY):
-        responses = file.replace(".json", "_responses.json")
-        try:
-            surveys.append([file.replace('.json', ''), 
-                            get_survey_title(file), 
-                            get_entry_count(responses),
-                            get_response_date(responses)])
-        except OSError or IOError as e:
-            print(e)
+    try:
+        for file in os.listdir(SURVEY_DIRECTORY):
+            responses = file.replace(".json", "_responses.json")
+            try:
+                surveys.append([file.replace('.json', ''), 
+                                get_survey_title(file), 
+                                get_entry_count(responses),
+                                get_response_date(responses)])
+            except OSError or IOError as e:
+                print(e)
+    except OSError or IOError as e:
+        print("No Surveys")
     return render_template(
         "admin.jinja2",
         title="Admin Homepage",
