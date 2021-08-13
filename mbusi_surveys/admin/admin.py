@@ -151,11 +151,14 @@ def upload_file():
                 try: 
                     f = open(os.path.join(TEMP_DIRECTORY, filename), 'r')
                     survey = json.load(f)
+                    print("survey loaded from temp and ready to check")
                     f.close()
                     
                     # move file to survey folder
                     if os.path.exists(os.path.join(TEMP_DIRECTORY, filename)):
+                        print("Survey path does exist; ready to move to surveys directory")
                         os.replace(os.path.join(TEMP_DIRECTORY, filename), os.path.join(SURVEY_DIRECTORY, filename))
+                        print("Survey " + str(filename) + " has been moved to the surveys folder")
                     
                     # create response file
                     response_file = filename.replace('.json', '')
