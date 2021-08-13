@@ -3,6 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -14,7 +15,7 @@ def create_app():
         app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://uzbiy6sxtg1wi:smTY464FvRGfYMB@35.202.17.55/dbekqfrcjb4dfy'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     
@@ -33,7 +34,7 @@ def create_app():
 
     with app.app_context():
         # Import parts of our flask_wtforms_tutorial
-        
+        '''
         from .auth import auth
         app.register_blueprint(auth.auth)
         
@@ -42,5 +43,13 @@ def create_app():
         
         from .surveys import surveys
         app.register_blueprint(surveys.survey_bp)
+        '''
+        db.metadata.create_all(db.engine)
+
+        user = User(id=1, email="kayla@mbusi.com", password= generate_password_hash("12345",method='sha256'), name="admin")
+
+        db.session.add(user)
+        db.session.commit()
+
         
         return app
