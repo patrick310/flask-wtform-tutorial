@@ -256,8 +256,8 @@ def admin():
                             get_survey_title(file), 
                             get_entry_count(responses),
                             get_response_date(responses)])
-        except OSError or IOError:
-            print("Survey file not found")
+        except OSError or IOError as e:
+            print(e)
     return render_template(
         "admin.jinja2",
         title="Admin Homepage",
